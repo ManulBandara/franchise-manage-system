@@ -69,11 +69,11 @@ include 'conn.php';
             padding: 0; /* Remove padding */
             width: 250px; /* Set fixed width */
             height: 100px; /* Set fixed height */
-            background-color: #000000;
+            background-color: #002D62; /* Change background color to blue */
             color: #fff;
             text-decoration: none;
             border: none;
-            border-radius: 10px; /* Increase border radius for a rounded button appearance */
+            border-radius: 20px; /* Increase border radius for a rounded button appearance */
             cursor: pointer;
             display: flex; /* Use flexbox for vertical alignment */
             justify-content: center; /* Center text horizontally */
@@ -81,7 +81,8 @@ include 'conn.php';
             font-size: 30px;
             text-align: center;
             font-weight: bold;
-        }
+}
+
     </style>
     <title>Franchise User</title>
     <link rel="stylesheet" type="text/css" href="styles.css">

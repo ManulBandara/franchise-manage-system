@@ -98,7 +98,7 @@ $totalShops = 30; // Example value, replace this with your actual count
 <!-- Example 3 -->
 <div class="col-lg-3 col-6">
     <!-- small box -->
-    <a href="example3.php" class="text-decoration-none">
+    <a href="location\map.php" class="text-decoration-none">
         <div class="small-box bg-danger">
             <div class="inner">
                 <h3>Locations</h3> <!-- Change the value accordingly -->
@@ -115,7 +115,7 @@ $totalShops = 30; // Example value, replace this with your actual count
 <!-- Example 4 -->
 <div class="col-lg-3 col-6">
     <!-- small box -->
-    <a href="example4.php" class="text-decoration-none">
+    <a href="inventory_upload.php" class="text-decoration-none">
         <div class="small-box bg-primary">
             <div class="inner">
                 <h3>Inventory</h3> <!-- Change the value accordingly -->

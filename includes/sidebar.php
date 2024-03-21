@@ -32,6 +32,34 @@
             </a>
           </li>
           
+
+          <li class="nav-item">
+            <a href="view_region.php" class="nav-link">
+              <i class="nav-icon fa fa-user-plus" style="color: #fff;"></i>
+              <p style="color: #fff; font-weight: 400;">
+              All Regions
+                
+              </p>
+            </a>
+
+             <li class="nav-item">
+            <a href="view_province.php" class="nav-link">
+              <i class="nav-icon fa fa-user-plus" style="color: #fff;"></i>
+              <p style="color: #fff; font-weight: 400;">
+              All Provinces
+                
+              </p>
+            </a>
+
+             <li class="nav-item">
+            <a href="view_rtom.php" class="nav-link">
+              <i class="nav-icon fa fa-user-plus" style="color: #fff;"></i>
+              <p style="color: #fff; font-weight: 400;">
+              All Rtom Codes
+                
+              </p>
+            </a>
+
           <li class="nav-item">
             <a href="view_page.php" class="nav-link">
               <i class="nav-icon fa fa-user-plus" style="color: #fff;"></i>

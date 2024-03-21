@@ -1,5 +1,4 @@
 <?php include('conn.php');?>
->
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +31,33 @@ h6 {
    text-align: center;
    color: red;
 }
+.modal-header {
+    background-color: #007bff; /* Header background color */
+    color: #fff; /* Header text color */
+    border-bottom: none; /* Remove border at the bottom of the header */
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+}
+
+.modal-title {
+    margin-right: auto; /* Push the close button to the right */
+    font-size: 24px; /* Adjust title font size */
+}
+
+.close {
+    font-size: 24px; /* Adjust close button font size */
+    color: #fff; /* Close button color */
+    opacity: 0.7; /* Adjust close button opacity */
+    transition: opacity 0.3s ease; /* Add transition effect */
+}
+
+.close:hover {
+    opacity: 1; /* Change opacity on hover */
+}
+
 </style>
 </head>
 <body>
@@ -59,8 +85,8 @@ h6 {
         <tr>
             <th>ID</th>
             <th>Franchise Name</th>
-            <th>Franchise code</th>
-            <th>Location</th>
+            <th>Rtom Code</th>
+            <th>Province</th>
             <th>Regions</th>
             <th>Start Date</th>
             <th>Update</th>
@@ -140,85 +166,75 @@ if(isset($_GET['delete_msg'])){
 
 <!-- Modal -->
 <form action="insert_data.php" method="post">
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add New Shop</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-            
-                <div class="form-group">
-                    <label for="fr_name">Farnchise Name</label>
-                    <input type="text" name="fr_name" class="form-control">
-                </div>
-               
-                 <div class="form-group">
-                    <label for="fr_code">Franchise Code</label> <br>
-                     <th class="select-header">
-                  <select id="rtomCodeSelect" class="filter-select" name="fr_code">
-                    <option value="" selected>All RTOM Code</option>
-                    <?php
-                    // Fetch distinct RTOM codes from the database
-                    $distinctRtomCodes = mysqli_query($conn, "SELECT DISTINCT rtom_code FROM tb_data");
-                    foreach($distinctRtomCodes as $rtomCode) {
-                    echo '<option value="' . $rtomCode["rtom_code"] . '">' . $rtomCode["rtom_code"] . '</option>';
-                    }
-                    ?>
-                    </select>
-                    </th>
-                </div>
-                <div class="form-group">
-                    <label for="fr_location">Location</label> <br>
-                    <th class="select-header">
-                  <select id="provinceSelect" class="filter-select" name="fr_location">
-                    <option value="" selected>All Province</option>
-                    <?php
-                    // Fetch distinct RTOM codes from the database
-                    $distinctProvince = mysqli_query($conn, "SELECT DISTINCT province FROM tb_data");
-                    foreach($distinctProvince as $province) {
-                    echo '<option value="' . $province["province"] . '">' . $province["province"] . '</option>';
-                    }
-                    ?>
-                    </select>
-                    </th>
-                    
-                </div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New Shop</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <!-- <span aria-hidden="true">&times;</span> -->
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="fr_name">Franchise Name</label>
+            <input type="text" name="fr_name" class="form-control" placeholder="Enter Franchise Name">
+          </div>
+          <div class="form-group">
+            <label for="fr_code">Rtom Code</label>
+            <select id="fr_code" class="form-control" name="fr_code">
+              <option value="" selected disabled>Select Rtom Code</option>
+              <?php
+              // Fetch distinct RTOM codes from the database
+              $distinctRtomCodes = mysqli_query($conn, "SELECT DISTINCT rtom_code FROM rtom");
+              foreach($distinctRtomCodes as $rtomCode) {
+                echo '<option value="' . $rtomCode["rtom_code"] . '">' . $rtomCode["rtom_code"] . '</option>';
+              }
+              ?>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fr_location">Province</label>
+            <select id="fr_location" class="form-control" name="fr_location">
+              <option value="" selected disabled>Select Province</option>
+              <?php
+              // Fetch distinct provinces from the database
+              $distinctProvinceName = mysqli_query($conn, "SELECT DISTINCT province_name FROM provinces");
+              foreach($distinctProvinceName as $provinceName) {
+                echo '<option value="' . $provinceName["province_name"] . '">' . $provinceName["province_name"] . '</option>';
+              }
+              ?>
+            </select>
+          </div>
+          
+            <div class="form-group">
+            <label for="regions">Region Code</label>
+            <select id="regionsNameSelect" class="form-control" name="regions">
+              <option value="" selected disabled>Region Name</option>
+              <?php
+              // Fetch distinct province name from the database
+              $distinctRegionName = mysqli_query($conn, "SELECT DISTINCT region_name FROM region");
+              foreach($distinctRegionName as $regionName) {
+                echo '<option value="' . $regionName["region_name"] . '">' . $regionName["region_name"] . '</option>';
+              }
+              ?>
+            </select>
+        </div>
 
-                 <div class="form-group">
-                    <label for="regions">Regions</label> <br>
-                    <th class="select-header">
-                  <select id="regionsSelect" class="filter-select" name="regions">
-                    <option value="" selected>All Regions</option>
-                    <?php
-                    // Fetch distinct RTOM codes from the database
-                    $distinctRegions = mysqli_query($conn, "SELECT DISTINCT regions FROM tb_data");
-                    foreach($distinctRegions as $regions) {
-                    echo '<option value="' . $regions["regions"] . '">' . $regions["regions"] . '</option>';
-                    }
-                    ?>
-                    </select>
-                    </th>
-                    
-                </div>
-
-                <div class="form-group">
-                    <label for="start_date">Start Date</label>
-                    <input type="date" name="start_date" class="form-control">
-                </div>
-           
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-success" name="add_new" value="ADD">
+          <div class="form-group">
+            <label for="start_date">Start Date</label>
+            <input type="date" name="start_date" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-success" name="add_new" value="Add">
+        </div>
       </div>
     </div>
   </div>
-</div>
- </form>
+</form>
+
 </div>
 
 </div>

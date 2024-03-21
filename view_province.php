@@ -2,8 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
- 
-<title>Employees</title>
+<title>All Provinces</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
 <style>
@@ -58,47 +57,44 @@ h6 {
 .close:hover {
     opacity: 1; /* Change opacity on hover */
 }
-
 </style>
 </head>
 <body>
 
-<h1 id="main_title">Employee Management</h1>
+<h1 id="main_title">All Provinces</h1>
 <div class="container">
 
-<nav class="navbar">
-    <ul>
-        <li><a href="user_dash.php">Home</a></li>
-       
-    </ul>
-</nav>
+
+
+
+
 <div class="box1">
-<h2>All Employees</h2>
+<h2>All Provinces</h2>
 <br>
-<button class="btn btn-primary"data-bs-toggle="modal"data-bs-target="#exampleModal">Add Employees</button>
+
+<button class="btn btn-primary"data-bs-toggle="modal"data-bs-target="#exampleModal">Add New Province</button>
+
+
+<br>
+<br>
+<br>
+
 </div>
-<br>
-<br>
-<br>
+
 <table class="table table-hover table-bordered table-striped">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Franchise Code</CODE></th>
-            <th>Full Name</th>
-            <th>Address</th>
-            <th>Mobile Number</th>
-            <th>NIC</th>
+            <th>Province ID</th>
+            <th>Province Name</th>
+            <th>Regions</th>
             <th>Update</th>
-            <th>Status</th>
-            <th>Delete</th>
-
+             <th>Delete</th> 
         </tr>
     </thead>
      <tbody>
         <?php
 
-            $query = "SELECT * FROM students";
+            $query = "SELECT * FROM provinces";
             $result = mysqli_query($conn, $query);
 
             if(!$result){
@@ -109,38 +105,28 @@ h6 {
                      ?>
         <tr>
             <td><?php echo $row['id']; ?></td>
-            <td><?php echo $row['fr_code']; ?></td>
-            <td><?php echo $row['full_name']; ?></td>
-            <td><?php echo $row['address']; ?></td>
-            <td><?php echo $row['mob_no']; ?></td>
-            <td><?php echo $row['nic']; ?></td>
-            <td><a href="update_employee.php?id=<?php echo $row['id']; ?>" class="btn btn-success">Update</a></td>
+            <td><?php echo $row['province_name']; ?></td>
+             <td><?php echo $row['region_name']; ?></td>
 
-            <td>
-                <?php
-                    if($row['status']==1){
-                        echo '<p><a href="employee_status.php?id='.$row['id'].'&status=0" 
-                        class="btn btn-primary">Active</a></p>';
-                    }
-                    else{
-                        echo '<p><a href="employee_status.php?id='.$row['id'].'&status=1" class="btn btn-blue">Inactive</a></p>';
-                    }
-                
 
-                ?>
-            </td>
 
-            <td><a href="delete_employee.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a></td>
+            <td><a href="update_province.php?id=<?php echo $row['id']; ?>" class="btn btn-success">Update</a></td>
+            <td><a href="delete_province.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a></td>
+            
+            
+             
+            
 
         </tr>     
                 
             <?php
         
                 }
-            }               
+            }
 
 ?>
-  
+
+
      </tbody>
             
 </table>
@@ -177,55 +163,57 @@ if(isset($_GET['delete_msg'])){
 
 ?>
 
+
 <!-- Modal -->
-<form action="insert_employee.php" method="post">
+<form action="add_province.php" method="post">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
+    <div class="header-content">
+        <h5 class="modal-title" id="exampleModalLabel">Add New Province</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <!-- <span aria-hidden="true">&times;</span> -->
+            
         </button>
-      </div>
-      <div class="modal-body">
+    </div>
+</div>
 
-                <div class="form-group">
-                    <label for="fr_code">Franchise Code</label>
-                    <input type="text" name="fr_code" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="full_name">Full Name</label>
-                    <input type="text" name="full_name" class="form-control">
-                </div>
-                 <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" name="address" class="form-control">
-                </div>
-                 <div class="form-group">
-                    <label for="mob_no">Mobile Number</label>
-                    <input type="text" name="mob_no" class="form-control">
-                </div>
-                  <div class="form-group">
-                    <label for="nic">NIC</label>
-                    <input type="text" name="nic" class="form-control">
-                </div>
-                
-                
-           
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="province_name">Province Name</label>
+            <input type="text" name="province_name" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="region_name">Region Code</label>
+            <select id="regionNameSelect" class="form-control" name="region_name">
+              <option value="" selected disabled>Region Name</option>
+              <?php
+              // Fetch distinct province name from the database
+              $distinctRegionName = mysqli_query($conn, "SELECT DISTINCT region_name FROM region");
+              foreach($distinctRegionName as $regionName) {
+                echo '<option value="' . $regionName["region_name"] . '">' . $regionName["region_name"] . '</option>';
+              }
+              ?>
+            </select>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-success" name="add_employees" value="ADD">
+        <input type="submit" class="btn btn-success" name="add_new" value="ADD">
       </div>
     </div>
   </div>
 </div>
- </form>
+</form>
 
- </div>
+
+
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
 
 
