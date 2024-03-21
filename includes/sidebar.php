@@ -114,25 +114,8 @@
             </a>
             
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table" style="color: #fff;"></i>
-              <p style="color: #fff; font-weight: 400;">
-                Media
-                
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="test.php" class="nav-link">
-              <i class="nav-icon fa fa-user-plus" style="color: #fff;"></i>
-              <p style="color: #fff; font-weight: 400;">
-                Registered User
-              </p>
-            </a>
-
-              </li>
+         
+         
           <li class="nav-item">
             <a href="email.php" class="nav-link">
               <i class="nav-icon fa fa-envelope" style="color: #fff;"></i>
