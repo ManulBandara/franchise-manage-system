@@ -1,4 +1,4 @@
-<?php include('conn.php');?>
+<?php include('conn.php');z?>
 <!DOCTYPE html>
 <html>
 <head>

@@ -1,4 +1,5 @@
 <?php include('conn.php');?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,12 +67,12 @@ h6 {
 <h1 id="main_title">Employee Management</h1>
 <div class="container">
 
-<nav class="navbar">
+<!-- <nav class="navbar">
     <ul>
         <li><a href="user_dash.php">Home</a></li>
        
     </ul>
-</nav>
+</nav> -->
 <div class="box1">
 <h2>All Employees</h2>
 <br>
@@ -210,6 +211,7 @@ if(isset($_GET['delete_msg'])){
                     <label for="nic">NIC</label>
                     <input type="text" name="nic" class="form-control">
                 </div>
+                
                 
                 
            
