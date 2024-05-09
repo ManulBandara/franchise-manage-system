@@ -1,4 +1,10 @@
-<?php include('conn.php');?>
+<?php
+include ("conn/conn.php");
+include 'includes/header.php';
+include 'includes/topbar.php';
+include 'includes/sidebar.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,14 +91,13 @@ if(isset($_POST['update_new'])){
 
 }
 ?>
-               <form action="update_rtom.php?id_new=<?php echo $id; ?>" method="post">
-                <div class="form-group">
-                    <label for="rtom_code">Rtom Code</label>
-                    <input type="text" name="rtom_code" class="form-control" value="<?php echo $row['rtom_code']?>">
-                </div>
-                
-                
-                    <input type="submit" class="btn btn-success" name="update_new" value="UPDATE">
-
-                </form>
+              <div style="display: flex; justify-content: center;height: 20vh;">
+    <form action="update_rtom.php?id_new=<?php echo $id; ?>" method="post">
+        <div class="form-group">
+            <label for="rtom_code">Rtom Code</label>
+            <input type="text" name="rtom_code" class="form-control" value="<?php echo $row['rtom_code']?>">
+        </div>
+        <input type="submit" class="btn btn-success" name="update_new" value="UPDATE">
+    </form>
+</div>
 

@@ -1,4 +1,10 @@
-<?php include('conn.php');?>
+<?php
+include ("conn/conn.php");
+include 'includes/header.php';
+include 'includes/topbar.php';
+include 'includes/sidebar.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,6 +63,12 @@ h6 {
 .close:hover {
     opacity: 1; /* Change opacity on hover */
 }
+
+/* Center the table */
+.table-container {
+    margin: 0 auto; /* Center horizontally */
+    width: 83%; /* Adjust width as needed */
+}
 </style>
 </head>
 <body>
@@ -69,8 +81,8 @@ h6 {
 
 
 <div class="box1">
-<h2>All Provinces</h2>
-<br>
+<!-- <h2>All Provinces</h2> -->
+<!-- <br> -->
 
 <button class="btn btn-primary"data-bs-toggle="modal"data-bs-target="#exampleModal">Add New Province</button>
 
@@ -81,6 +93,7 @@ h6 {
 
 </div>
 
+<div class="table-container"> <!-- Added container for the table -->
 <table class="table table-hover table-bordered table-striped">
     <thead>
         <tr>
@@ -130,6 +143,7 @@ h6 {
      </tbody>
             
 </table>
+</div>
 
 <?php
 

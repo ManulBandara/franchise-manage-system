@@ -1,4 +1,10 @@
-<?php include('conn.php');?>
+<?php
+include ("conn/conn.php");
+include 'includes/header.php';
+include 'includes/topbar.php';
+include 'includes/sidebar.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,6 +64,13 @@ h6 {
     opacity: 1; /* Change opacity on hover */
 }
 
+/* Center the table */
+.table-container {
+    margin: 0 auto; /* Center horizontally */
+    margin-left: 100px; /* Add top margin */
+    width: 96%; /* Adjust width as needed */
+}
+
 </style>
 </head>
 <body>
@@ -70,8 +83,8 @@ h6 {
 
 
 <div class="box1">
-<h2>All Shops</h2>
-<br>
+<!-- <h2>All Shops</h2>
+<br> -->
 
 <button class="btn btn-primary"data-bs-toggle="modal"data-bs-target="#exampleModal">Add New Shop</button>
 <br>
@@ -80,11 +93,14 @@ h6 {
 
 </div>
 
+<div class="table-container"> <!-- Added container for the table -->
 <table class="table table-hover table-bordered table-striped">
     <thead>
         <tr>
             <th>ID</th>
             <th>Franchise Name</th>
+            <th>Owner Name</th>
+            <th>Franchise Location</th>
             <th>Rtom Code</th>
             <th>Province</th>
             <th>Regions</th>
@@ -110,6 +126,8 @@ h6 {
         <tr>
             <td><?php echo $row['id']; ?></td>
             <td><?php echo $row['fr_name']; ?></td>
+            <td><?php echo $row['owner_name']; ?></td>
+            <td><?php echo $row['franchise_location']; ?></td>
             <td><?php echo $row['fr_code']; ?></td>
             <td><?php echo $row['fr_location']; ?></td>
             <td><?php echo $row['regions']; ?></td>
@@ -130,7 +148,7 @@ h6 {
      </tbody>
             
 </table>
-
+</div>
 <?php
 
 if(isset($_GET['message'])){
@@ -180,6 +198,16 @@ if(isset($_GET['delete_msg'])){
             <label for="fr_name">Franchise Name</label>
             <input type="text" name="fr_name" class="form-control" placeholder="Enter Franchise Name">
           </div>
+
+          <div class="form-group">
+            <label for="owner_name">Owner Name</label>
+            <input type="text" name="owner_name" class="form-control" placeholder="Enter Owner Name">
+          </div>
+          <div class="form-group">
+            <label for="franchise_location">Franchise Location</label>
+            <input type="text" name="franchise_location" class="form-control" placeholder="Enter Franchise Location">
+          </div>
+
           <div class="form-group">
             <label for="fr_code">Rtom Code</label>
             <select id="fr_code" class="form-control" name="fr_code">
@@ -193,6 +221,7 @@ if(isset($_GET['delete_msg'])){
               ?>
             </select>
           </div>
+
           <div class="form-group">
             <label for="fr_location">Province</label>
             <select id="fr_location" class="form-control" name="fr_location">

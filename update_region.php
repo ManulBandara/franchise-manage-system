@@ -1,4 +1,10 @@
-<?php include('conn.php');z?>
+<?php
+include ("conn/conn.php");
+include 'includes/header.php';
+include 'includes/topbar.php';
+include 'includes/sidebar.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,14 +91,15 @@ if(isset($_POST['update_new'])){
 
 }
 ?>
-               <form action="update_region.php?id_new=<?php echo $id; ?>" method="post">
-                <div class="form-group">
-                    <label for="region_name">Region Name</label>
-                    <input type="text" name="region_name" class="form-control" value="<?php echo $row['region_name']?>">
-                </div>
+ <div style="display: flex; justify-content: center;height: 20vh;">
+  <form action="update_region.php?id_new=<?php echo $id; ?>" method="post">
+        <div class="form-group">
+                <label for="region_name">Region Name</label>
+                <input type="text" name="region_name" class="form-control" value="<?php echo $row['region_name']?>">
+            </div>
                 
                 
-                    <input type="submit" class="btn btn-success" name="update_new" value="UPDATE">
-
-                </form>
+               <input type="submit" class="btn btn-success" name="update_new" value="UPDATE">
+</form>
+</div>
 

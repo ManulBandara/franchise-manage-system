@@ -3,6 +3,8 @@ include "conn.php";
 if(isset($_POST['add_new'])){
 
     $fr_name = $_POST['fr_name'];
+    $owner_name = $_POST['owner_name'];
+    $franchise_location = $_POST['franchise_location'];
     $fr_code = $_POST['fr_code'];
     $fr_location = $_POST['fr_location'];
     $regions = $_POST['regions'];
@@ -12,7 +14,7 @@ if(isset($_POST['add_new'])){
     if($fr_name == "" || empty($fr_name)){
         header("Location: view_page.php?message=you must fill the required fields");
     } else {
-        $query = "INSERT INTO fr_shops (fr_name, fr_code, fr_location, regions, start_date) VALUES ('$fr_name', '$fr_code', '$fr_location', '$regions', '$start_date')";
+        $query = "INSERT INTO fr_shops (fr_name, owner_name, franchise_location, fr_code, fr_location, regions, start_date) VALUES ('$fr_name', '$owner_name', '$franchise_location','$fr_code', '$fr_location', '$regions', '$start_date')";
     
         $result = mysqli_query($conn, $query);
     

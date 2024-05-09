@@ -1,4 +1,10 @@
-<?php include('conn.php');?>
+<?php
+include ("conn/conn.php");
+include 'includes/header.php';
+include 'includes/topbar.php';
+include 'includes/sidebar.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -84,7 +90,7 @@ if(isset($_POST['update_new'])){
     }
 
 }
-?>
+?>                            <div style="display: flex; justify-content: center;height: 20vh;">
                <form action="update_province.php?id_new=<?php echo $id; ?>" method="post">
                 <div class="form-group">
                     <label for="province_name">Province Name</label>
@@ -95,4 +101,5 @@ if(isset($_POST['update_new'])){
                     <input type="submit" class="btn btn-success" name="update_new" value="UPDATE">
 
                 </form>
+</div>
 

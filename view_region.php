@@ -1,4 +1,10 @@
-<?php include('conn.php');?>
+<?php
+include ("conn/conn.php");
+include 'includes/header.php';
+include 'includes/topbar.php';
+include 'includes/sidebar.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,6 +64,12 @@ h6 {
     opacity: 1; /* Change opacity on hover */
 }
 
+/* Center the table */
+.table-container {
+    margin: 0 auto; /* Center horizontally */
+    width: 83%; /* Adjust width as needed */
+}
+
 </style>
 </head>
 <body>
@@ -65,101 +77,60 @@ h6 {
 <h1 id="main_title">All Regions</h1>
 <div class="container">
 
-
-
-
-
 <div class="box1">
-<h2>All Regions</h2>
-<br>
-
-<button class="btn btn-primary"data-bs-toggle="modal"data-bs-target="#exampleModal">Add New Region</button>
-
-
-<br>
-<br>
-<br>
-
+    <!-- <h2>All Regions</h2> -->
+    <!-- <br> -->
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Region</button>
+    <br>
+    <br>
+    <br>
 </div>
 
-<table class="table table-hover table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Region ID</th>
-            <th>Region Name</th>
-            <th>Update</th>
-             <th>Delete</th> 
-        </tr>
-    </thead>
-     <tbody>
-        <?php
-
-            $query = "SELECT * FROM region";
-            $result = mysqli_query($conn, $query);
-
-            if(!$result){
-                die("Query failed". mysqli_error());
-            }
-            else{
-                while($row = mysqli_fetch_assoc($result)){
-                     ?>
-        <tr>
-            <td><?php echo $row['id']; ?></td>
-            <td><?php echo $row['region_name']; ?></td>
-
-            <td><a href="update_region.php?id=<?php echo $row['id']; ?>" class="btn btn-success">Update</a></td>
-            <td><a href="delete_region.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a></td>
-            
-            
-             
-            
-
-        </tr>     
-                
+<div class="table-container"> <!-- Added container for the table -->
+    <table class="table table-hover table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Region ID</th>
+                <th>Region Name</th>
+                <th>Update</th>
+                <th>Delete</th> 
+            </tr>
+        </thead>
+        <tbody>
             <?php
-        
+                $query = "SELECT * FROM region";
+                $result = mysqli_query($conn, $query);
+                if(!$result){
+                    die("Query failed". mysqli_error());
                 }
-            }
-
-?>
-
-
-     </tbody>
-            
-</table>
+                else{
+                    while($row = mysqli_fetch_assoc($result)){
+                        ?>
+            <tr>
+                <td><?php echo $row['id']; ?></td>
+                <td><?php echo $row['region_name']; ?></td>
+                <td><a href="update_region.php?id=<?php echo $row['id']; ?>" class="btn btn-success">Update</a></td>
+                <td><a href="delete_region.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a></td>
+            </tr>     
+            <?php
+                    }
+                }
+            ?>
+        </tbody>
+    </table>
+</div>
 
 <?php
-
 if(isset($_GET['message'])){
     echo "<h6>".$_GET['message']."</h6>";
 }
-
 ?>
 
 <?php
-
-// if(isset($_GET['insert_msg'])){
-//     echo "<h6>".$_GET['insert_msg']."</h6>";
-// }
-
-?>
-
-<?php
-
-// if(isset($_GET['update_msg'])){
-//     echo "<h6>".$_GET['update_msg']."</h6>";
-// }
-
-?>
-
-<?php
-
 if(isset($_GET['delete_msg'])){
     echo "<h6>".$_GET['delete_msg']."</h6>";
 }
-
 ?>
-
 
 <!-- Modal -->
 <form action="add_region.php" method="post">
@@ -172,14 +143,11 @@ if(isset($_GET['delete_msg'])){
           <!-- <span aria-hidden="true">&times;</span> -->
         </button>
       </div>
-
       <div class="modal-body">
-                <div class="form-group">
-                    <label for="region_name">Region Name</label>
-                    <input type="text" name="region_name" class="form-control">
-                </div>
-               
-           
+        <div class="form-group">
+            <label for="region_name">Region Name</label>
+            <input type="text" name="region_name" class="form-control">
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -188,14 +156,9 @@ if(isset($_GET['delete_msg'])){
     </div>
   </div>
 </div>
- </form>
-
+</form>
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
-
-
-
-

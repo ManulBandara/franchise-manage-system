@@ -1,6 +1,8 @@
 <?php
-include 'inventory_header.php';
-include 'conn.php';
+include ("conn/conn.php");
+include 'includes/header.php';
+include 'includes/topbar.php';
+include 'includes/sidebar.php';
 ?>
 
 <!DOCTYPE html>
@@ -16,38 +18,73 @@ include 'conn.php';
     <title>File upload and download</title>
 
     <style>
-        body {
-            /* background-image: url('path/to/your/pdf-background-image.jpg');  */
+       body {
             background-color: #ffffff;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
         }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh; /* Adjusted height */
+            width: 80%; /* Adjusted width */
+            margin: 0 auto; /* Centering horizontally */
+        }
+
+        .upload-form {
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
         .upload-heading {
-            color: #000000;
+            color: #495057;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            margin-bottom: 20px;
+        }
+
+        .btn-upload,
+        .btn-show-files {
+            width: 100%;
         }
     </style>
 </head>
 <body>
     
+<!-- file uploading code -->
+
 <div class="container">
-    <div class="container mt-5">
-        <h2 class="upload-heading">Upload a file</h2>
-        <br>
+    <div class="upload-form">
+        <h2 class="upload-heading">Upload a File</h2>
         <form action="inventory_upload.php" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
-                <label for="file" class="form-label">Select file</label>
+                <label for="file" class="form-label">Select File</label>
                 <input type="file" class="form-control" name="file" id="file">
             </div>
-            <button type="submit" class="btn btn-primary">Upload file</button>
+            <button type="submit" class="btn btn-primary btn-upload">Upload File</button>
         </form>
 
         <!-- New button to redirect to another page -->
         <div class="mt-3">
-            <a href="show_inventory.php" class="btn btn-success">Show Files</a>
+            <a href="show_inventory.php" class="btn btn-success btn-show-files">Show Files</a>
         </div>
     </div>
+</div>
     
+<!-- end of file uploading code -->
+
 </body>
 </html>
 <?php
