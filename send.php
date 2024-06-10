@@ -19,7 +19,7 @@ if(isset($_POST['send'])){
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'manulbandara@gmail.com';
+    $mail->Username = '';
     $mail->Password = 'bfkqnsuvetjjaggn';
     $mail->SMTPSecure = 'tls';
     $mail->Port = 587;
@@ -27,7 +27,7 @@ if(isset($_POST['send'])){
     // $mail->Port = 465;
     
 
-    $mail->setFrom('manulbandara@gmail.com');
+    $mail->setFrom('');
 
     $mail->addAddress($_POST['email']);
 
