@@ -99,3 +99,7 @@ include 'includes/topbar.php';
     </div>
 </body>
 </html>
+
+<?php
+include 'includes/script.php';
+?>

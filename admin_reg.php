@@ -95,7 +95,7 @@
                     <input type="password" class="form-control" id="registerPassword" name="password">
                 </div>
                 <div class="form-group float-right">
-                    <a href="index.php"><small class="show-form">Already have an account? Login Here.</small></a>
+                    <a href="admin_login.php"><small class="show-form">Already have an account? Login Here.</small></a>
                 </div>
                 <button type="submit" name="regBtn" class="btn btn-primary login-register form-control">Register</button>
             </form>
