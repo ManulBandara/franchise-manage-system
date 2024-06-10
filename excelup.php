@@ -3,61 +3,112 @@ include ("conn/conn.php");
 include 'includes/header.php';
 include 'includes/topbar.php';
 include 'includes/sidebar.php';
+include 'header.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<meta charset="utf-8">
+<title>Import Excel To MySQL</title>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<style>
+#main_title {
+    text-align: center;
+    background-color: #0056a2;
+    color: #fff;
+    padding: 20px;
+    letter-spacing: 2px;
+    font-weight: 500;
+    width:5000px;
+}
+.container {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    margin-left: 100px;
+}
+
+th,
+td {
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 40px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+
+}
+
+th {
+    background-color: #07081b;
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+header {
+    background-color: #0056a2;
+    color: #fff;
+    position: fixed;
+    padding: 20px;
+    letter-spacing: 2px;
+    font-weight: 500;
+}
+
+
+
+
+
+
+
+</style>
 
 </head>
+
 <body>
+<div class="button-container">
+<a href="uploade.php" class="button">  
+<button id="viewUploadedSheetBtn" style="float: right;">View Uploaded Sheet</button><br>
+</a>
+</div>
 
-     <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0" style="color: #000; font-weight: bold;">Upload Excelsheet</h1>
-          </div><!-- /.col -->
-          <!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+<hr>
+<!-- Add search form for filtering by sheet ID -->
+<form method="post" action="">
+    <div style="float: right;">
+        <input type="text" id="searchId" name="searchId" placeholder="Search ID">
+        <button type="submit" id="searchButton" name="searchButton">Search</button>
     </div>
-    <!-- /.content-header -->
+</form>
 
-    
 
-            <!-- TABLE: LATEST ORDERS -->
-            <div class="card">
-              <div class="card-header border-transparent">
-                <h3 class="card-title">
-					
-				<form class="" action="" method="post" enctype="multipart/form-data">
-					<input type="file" name="excel" required value="">
-				<button type="submit" name="import" width>Import</button>
-				</form>
-				</h3>
 
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <div class="table-responsive">
-                  <table class="table m-0">
-                    <!-- Table with dropdowns for filtering -->
+<form class="" action="" method="post" enctype="multipart/form-data">
+<input type="file" name="excel" required value="">
+<!-- Add input field for sheet ID -->
+<label for="sheetID">Sheet ID:</label>
+<input type="text" id="sheetID" name="sheetID" required>
+
+<button type="submit" name="import">Import</button>
+<div id="no-data-message" style="display: none; margin-top: 10px;">No data found for the selected criteria.</div>
+
+</form>
+
+<hr>
+
+<!-- Total Sales Textbox -->
+<div style="text-align: center;">
+    <label for="totalSales" style="display: inline-block; margin-right: 10px;">Total Sales:</label>
+    <input type="text" id="totalSales" readonly style="display: inline-block;">
+</div>
+<br>
+
+
+<!-- Table with dropdowns for filtering -->
 <table id="data-table" border="1">
 <thead>
 <tr>
@@ -81,13 +132,12 @@ include 'includes/sidebar.php';
 <th>BB_PACKAGE</th>
 <th>IMEI_NO</th>
 
-
 </tr>
 <tr>
 <th></th>
 <th class="select-header">
 <select id="regionsSelect" class="filter-select">
-<option value="" selected>Filter by Region</option>
+<option value="" selected>All Region</option>
 <?php
 // Fetch distinct regions from the database
 $distinctRegions = mysqli_query($conn, "SELECT DISTINCT regions FROM tb_data");
@@ -99,7 +149,7 @@ echo '<option value="' . $region["regions"] . '">' . $region["regions"] . '</opt
 </th>
 <th class="select-header">
 <select id="provinceSelect" class="filter-select">
-<option value="" selected>Filter by Province</option>
+<option value="" selected>All Province</option>
 <?php
 // Fetch distinct provinces from the database
 $distinctProvinces = mysqli_query($conn, "SELECT DISTINCT province FROM tb_data");
@@ -111,7 +161,7 @@ echo '<option value="' . $province["province"] . '">' . $province["province"] . 
 </th>
 <th class="select-header">
 <select id="rtomCodeSelect" class="filter-select">
-<option value="" selected>Filter by RTOM Code</option>
+<option value="" selected>All RTOM Code</option>
 <?php
 // Fetch distinct RTOM codes from the database
 $distinctRtomCodes = mysqli_query($conn, "SELECT DISTINCT rtom_code FROM tb_data");
@@ -125,10 +175,22 @@ echo '<option value="' . $rtomCode["rtom_code"] . '">' . $rtomCode["rtom_code"] 
 <th></th>
 <th></th>
 <th></th>
-<th></th>
+<th class="select-header">
+<select id="soOrderTypeSelect" class="filter-select">
+<option value="" selected>All SO Order Type</option>
+<?php
+// Fetch distinct SO order types from the database
+$distinctSOOrderTypes = mysqli_query($conn, "SELECT DISTINCT so_ordt_type FROM tb_data");
+foreach($distinctSOOrderTypes as $soOrderType) {
+echo '<option value="' . $soOrderType["so_ordt_type"] . '">' . $soOrderType["so_ordt_type"] . '</option>';
+}
+?>
+</select>
+</th>
+
 <th class="select-header">
 <select id="serviceTypeSelect" class="filter-select">
-<option value="" selected>Filter by Service Type</option>
+<option value="" selected>All Service Type</option>
 <?php
 // Fetch distinct service types from the database
 $distinctServiceTypes = mysqli_query($conn, "SELECT DISTINCT service_type FROM tb_data");
@@ -142,7 +204,7 @@ echo '<option value="' . $serviceType["service_type"] . '">' . $serviceType["ser
 <th></th>
 <th class="select-header">
 <select id="soStatusSelect" class="filter-select">
-<option value="" selected>Filter by SO Status</option>
+<option value="" selected>All SO Status</option>
 <?php
 // Fetch distinct SO statuses from the database
 $distinctSOStatuses = mysqli_query($conn, "SELECT DISTINCT so_status FROM tb_data");
@@ -154,11 +216,37 @@ echo '<option value="' . $soStatus["so_status"] . '">' . $soStatus["so_status"] 
 </th>
 <th></th>
 <th></th>
-<th></th>
-<th></th>
+
+<th class="select-header">
+<select id="salesChannelSelect" class="filter-select">
+<option value="" selected>All Sales Channel</option>
+<?php
+// Fetch distinct sales channels from the database
+$distinctSalesChannels = mysqli_query($conn, "SELECT DISTINCT sales_channel FROM tb_data");
+foreach($distinctSalesChannels as $salesChannel) {
+echo '<option value="' . $salesChannel["sales_channel"] . '">' . $salesChannel["sales_channel"] . '</option>';
+}
+?>
+</select>
+</th>
+
+
+<th class="select-header">
+<select id="salesPersonSelect" class="filter-select">
+<option value="" selected>All Sales Person</option>
+<?php
+// Fetch distinct sales persons from the database
+$distinctSalesPersons = mysqli_query($conn, "SELECT DISTINCT sales_person FROM tb_data");
+foreach($distinctSalesPersons as $salesPerson) {
+echo '<option value="' . $salesPerson["sales_person"] . '">' . $salesPerson["sales_person"] . '</option>';
+}
+?>
+</select>
+</th>
+
 <th class="select-header">
 <select id="bbPackageSelect" class="filter-select">
-<option value="" selected>Filter by BB Package</option>
+<option value="" selected>All BB Package</option>
 <?php
 // Fetch distinct BB packages from the database
 $distinctBBPackages = mysqli_query($conn, "SELECT DISTINCT bb_package FROM tb_data");
@@ -168,38 +256,90 @@ echo '<option value="' . $bbPackage["bb_package"] . '">' . $bbPackage["bb_packag
 ?>
 </select>
 </th>
-<th></th>
+
+
+<th class="select-header">
+<select id="imeiNoSelect" class="filter-select">
+<option value="" selected>All IMEI No</option>
+<?php
+// Fetch distinct IMEI numbers from the database
+$distinctIMEINos = mysqli_query($conn, "SELECT DISTINCT imei_no FROM tb_data");
+foreach($distinctIMEINos as $imeiNo) {
+echo '<option value="' . $imeiNo["imei_no"] . '">' . $imeiNo["imei_no"] . '</option>';
+}
+?>
+</select>
+</th>
 </tr>
 </thead>
 <tbody>
-<?php
-$i = 1;
-$rows = mysqli_query($conn, "SELECT * FROM tb_data");
-foreach($rows as $row) :
-?>
-<tr>
-<td><?php echo $i++; ?></td>
-<td><?php echo $row["regions"]; ?></td>
-<td><?php echo $row["province"]; ?></td>
-<td><?php echo $row["rtom_code"]; ?></td>
-<td><?php echo $row["lea"]; ?></td>
-<td><?php echo $row["so_id"]; ?></td>
-<td><?php echo $row["product_label"]; ?></td>
-<td><?php echo $row["so_datecreated"]; ?></td>
-<td><?php echo $row["so_ordt_type"]; ?></td>
-<td><?php echo $row["service_type"]; ?></td>
-<td><?php echo $row["cr"]; ?></td>
-<td><?php echo $row["acct_number"]; ?></td>
-<td><?php echo $row["so_status"]; ?></td>
-<td><?php echo $row["sod_approved_date"]; ?></td>
-<td><?php echo $row["milestone_1_actual_end_date"]; ?></td>
-<td><?php echo $row["sales_channel"]; ?></td>
-<td><?php echo $row["sales_person"]; ?></td>
-<td><?php echo $row["bb_package"]; ?></td>
-<td><?php echo $row["imei_no"]; ?></td>
 
-</tr>
-<?php endforeach; ?>
+<?php
+if(isset($_POST["searchButton"])){
+    $sheetID = $_POST['searchId'];
+    $query = "SELECT * FROM tb_data WHERE sheet_id LIKE '%$sheetID%'";
+    $result = mysqli_query($conn, $query);
+    if(mysqli_num_rows($result) > 0){
+        $i = 1;
+        foreach($result as $row){
+            ?>
+            <tr>
+            <td><?php echo $i++; ?></td>
+            <td><?php echo $row["regions"]; ?></td>
+            <td><?php echo $row["province"]; ?></td>
+            <td><?php echo $row["rtom_code"]; ?></td>
+            <td><?php echo $row["lea"]; ?></td>
+            <td><?php echo $row["so_id"]; ?></td>
+            <td><?php echo $row["product_label"]; ?></td>
+            <td><?php echo $row["so_datecreated"]; ?></td>
+            <td><?php echo $row["so_ordt_type"]; ?></td>
+            <td><?php echo $row["service_type"]; ?></td>
+            <td><?php echo $row["cr"]; ?></td>
+            <td><?php echo $row["acct_number"]; ?></td>
+            <td><?php echo $row["so_status"]; ?></td>
+            <td><?php echo $row["sod_approved_date"]; ?></td>
+            <td><?php echo $row["milestone_1_actual_end_date"]; ?></td>
+            <td><?php echo $row["sales_channel"]; ?></td>
+            <td><?php echo $row["sales_person"]; ?></td>
+            <td><?php echo $row["bb_package"]; ?></td>
+            <td><?php echo $row["imei_no"]; ?></td>
+           
+            </tr>
+            <?php
+        }
+    } else {
+        echo "<tr><td colspan='20'>No data found for the given Sheet ID.</td></tr>";
+    }
+} else {
+    $i = 1;
+    $rows = mysqli_query($conn, "SELECT * FROM tb_data");
+    foreach($rows as $row) :
+    ?>
+    <tr>
+    <td><?php echo $i++; ?></td>
+    <td><?php echo $row["regions"]; ?></td>
+    <td><?php echo $row["province"]; ?></td>
+    <td><?php echo $row["rtom_code"]; ?></td>
+    <td><?php echo $row["lea"]; ?></td>
+    <td><?php echo $row["so_id"]; ?></td>
+    <td><?php echo $row["product_label"]; ?></td>
+    <td><?php echo $row["so_datecreated"]; ?></td>
+    <td><?php echo $row["so_ordt_type"]; ?></td>
+    <td><?php echo $row["service_type"]; ?></td>
+    <td><?php echo $row["cr"]; ?></td>
+    <td><?php echo $row["acct_number"]; ?></td>
+    <td><?php echo $row["so_status"]; ?></td>
+    <td><?php echo $row["sod_approved_date"]; ?></td>
+    <td><?php echo $row["milestone_1_actual_end_date"]; ?></td>
+    <td><?php echo $row["sales_channel"]; ?></td>
+    <td><?php echo $row["sales_person"]; ?></td>
+    <td><?php echo $row["bb_package"]; ?></td>
+    <td><?php echo $row["imei_no"]; ?></td>
+  
+    </tr>
+    <?php endforeach;
+}
+?>
 </tbody>
 </table>
 
@@ -210,88 +350,150 @@ echo "<h6>".$_GET['delete_msg']."</h6>";
 ?>
 
 <?php
-		if(isset($_POST["import"])){
-			$fileName = $_FILES["excel"]["name"];
-			$fileExtension = explode('.', $fileName);
-            $fileExtension = strtolower(end($fileExtension));
-			$newFileName = date("Y.m.d") . " - " . date("h.i.sa") . "." . $fileExtension;
+if(isset($_POST["import"])){
+    $fileName = $_FILES["excel"]["name"];
+    $fileExtension = explode('.', $fileName);
+    $fileExtension = strtolower(end($fileExtension));
+    $newFileName = date("Y.m.d") . " - " . date("h.i.sa") . "." . $fileExtension;
 
-			$targetDirectory = "uploads/" . $newFileName;
-			move_uploaded_file($_FILES['excel']['tmp_name'], $targetDirectory);
+    $targetDirectory = "uploads/" . $newFileName;
+    move_uploaded_file($_FILES['excel']['tmp_name'], $targetDirectory);
 
-			error_reporting(0);
-			ini_set('display_errors', 0);
+   // Get sheet ID entered by the user
+$sheetID = $_POST['sheetID'];
 
-			require 'excelReader/excel_reader2.php';
-			require 'excelReader/SpreadsheetReader.php';
+// Check if the sheet ID already exists in the uploaded_sheet table
+$existingSheetIDQuery = "SELECT * FROM uploded_sheet WHERE sheet_id = '$sheetID'";
+$existingSheetIDResult = mysqli_query($conn, $existingSheetIDQuery);
 
-			$reader = new SpreadsheetReader($targetDirectory);
-			foreach($reader as $key => $row){
-				$regions = $row[0];
-				$province = $row[1];
-				$rtom_code = $row[2];
-				$lea = $row[3];
-				$so_id = $row[4];
-				$product_label = $row[5];
-				$so_datecreated = $row[6];
-				$so_ordt_type = $row[7];
-				$service_type = $row[8];
-				$cr = $row[9];
-				$acct_number = $row[10];
-				$so_status = $row[11];
-				$so_statusdate = $row[12];
-				$sod_approved_date = $row[13];
-				$milestone_1_actual_end_date = $row[14];
-				$sales_channel = $row[15];
-				$sales_person = $row[16];
-				$so_initiator = $row[17];
-				$actual_dsp_date = $row[18];
-				$iptv_package = $row[19];
-				$bb_package = $row[20];
-				$iptv_previous_package = $row[21];
-				$bb_previous_package = $row[22];
-				$customer_contact = $row[23];
-				$imei_no = $row[24];
-				$payment_method = $row[25];
-				
-				
-				
-				mysqli_query($conn, "INSERT INTO tb_data VALUES('', '$regions', '$province', '$rtom_code', '$lea', '$so_id', '$product_label', '$so_datecreated' , '$so_ordt_type', '$service_type', '$cr', 
-				'$acct_number', '$so_status' , '$so_statusdate' , '$sod_approved_date' , '$milestone_1_actual_end_date' , '$sales_channel' , '$sales_person' , '$so_initiator' , '$actual_dsp_date' , '$iptv_package' , '$bb_package' , '$iptv_previous_package' , '$bb_previous_package' , '$customer_contact' , '$imei_no' , '$payment_method')");
-			}
+if(mysqli_num_rows($existingSheetIDResult) > 0){
+    // Sheet ID already exists
+    echo "<script>alert('Sheet ID $sheetID has already been used. Please provide a new Sheet ID.');</script>";
+} else {
+    // Check if the uploaded sheet already exists in the uploaded_sheet table
+    $existingSheetQuery = "SELECT * FROM uploded_sheet WHERE file_name = '$fileName'";
+    $existingSheetResult = mysqli_query($conn, $existingSheetQuery);
+
+    if(mysqli_num_rows($existingSheetResult) > 0){
+        // Check if the sheet ID exists for the given file name
+        $existingSheetWithIDQuery = "SELECT * FROM uploded_sheet WHERE file_name = '$fileName' AND sheet_id = '$sheetID'";
+        $existingSheetWithIDResult = mysqli_query($conn, $existingSheetWithIDQuery);
+
+        if(mysqli_num_rows($existingSheetWithIDResult) > 0){
+            // Sheet ID exists
+            echo "<script>alert('Sheet ID $sheetID has been used before for this file. Please provide a new Sheet ID.');</script>";
+        } else {
+            // Sheet ID doesn't exist for the given file name
+            echo "<script>alert('This sheet has been imported before with a different Sheet ID.');</script>";
+        }
+    } else {
+        // Insert uploaded sheet details into the uploaded_sheet table
+        mysqli_query($conn, "INSERT INTO uploded_sheet (file_name, sheet_id) VALUES ('$fileName', '$sheetID')");
+
+        // Display success message
+        echo "<script>alert('Import upload detail successful');</script>";
+    }
 
 
 
+
+        // Read Excel data and insert into td_data table
+        error_reporting(0);
+        ini_set('display_errors', 0);
+
+        require 'excelReader/excel_reader2.php';
+        require 'excelReader/SpreadsheetReader.php';
+
+        $reader = new SpreadsheetReader($targetDirectory);
+        foreach ($reader as $key => $sheetData) {
+            
+            if ($key > 0){
+
+            $regions = $sheetData[0];
+            $province = $sheetData[1];
+            $rtom_code = $sheetData[2];
+            $lea = $sheetData[3];
+            $so_id = $sheetData[4];
+            $product_label = $sheetData[5];
+            $so_datecreated = $sheetData[6];
+            $so_ordt_type = $sheetData[7];
+            $service_type = $sheetData[8];
+            $cr = $sheetData[9];
+            $acct_number = $sheetData[10];
+            $so_status = $sheetData[11];
+            $sod_approved_date = $sheetData[12];
+            $milestone_1_actual_end_date = $sheetData[13];
+            $sales_channel = $sheetData[14];
+            $sales_person = $sheetData[15];
+            $bb_package = $sheetData[16];
+            $imei_no = $sheetData[17];
+
+           // Insert data into the database with the corresponding sheet ID
+        mysqli_query($conn, "INSERT INTO tb_data (regions, province, rtom_code, lea, so_id, product_label, so_datecreated, so_ordt_type, service_type, cr, acct_number, so_status, sod_approved_date, milestone_1_actual_end_date, sales_channel, sales_person, bb_package, imei_no, sheet_id) VALUES ('$regions', '$province', '$rtom_code', '$lea', '$so_id', '$product_label', '$so_datecreated', '$so_ordt_type', '$service_type', '$cr', '$acct_number', '$so_status', '$sod_approved_date', '$milestone_1_actual_end_date', '$sales_channel', '$sales_person', '$bb_package', '$imei_no', '$sheetID')");
+    }
 }
+
+    echo
+    "
+    <script>
+    alert('Successfully Imported');
+    document.location.href = '';
+    </script>
+    ";
+    }
+}
+
 ?>
 
 <script>
 $(document).ready(function(){
-// Change event on select dropdowns for filtering
-$('.filter-select').change(function(){
-var columnIndex = $(this).closest('th').index() + 1;
-var columnValue = $(this).val();
+    // Change event on select dropdowns for filtering
+    $('.filter-select').change(function(){
+        // Hide all rows
+        $('#data-table tbody tr').hide();
 
-// Filter the table based on the selected value
-filterTable(columnIndex, columnValue);
-});
+        // Filter the table based on the selected values
+        var regionValue = $('#regionsSelect').val();
+        var provinceValue = $('#provinceSelect').val();
+        var rtomCodeValue = $('#rtomCodeSelect').val();
+        var soOrderTypeValue = $('#soOrderTypeSelect').val();
+        var serviceTypeValue = $('#serviceTypeSelect').val();
+        var soStatusValue = $('#soStatusSelect').val();
+        var salesChannelValue = $('#salesChannelSelect').val();
+        var salesPersonValue = $('#salesPersonSelect').val();
+        var bbPackageValue = $('#bbPackageSelect').val();
+        var imeiNoValue = $('#imeiNoSelect').val();
 
-function filterTable(columnIndex, columnValue) {
-// Show all rows
-$('#data-table tbody tr').show();
+        var $filteredRows = $('#data-table tbody tr').filter(function(){
+            var regionMatch = regionValue === '' || $(this).find('td:nth-child(2)').text() === regionValue;
+            var provinceMatch = provinceValue === '' || $(this).find('td:nth-child(3)').text() === provinceValue;
+            var rtomCodeMatch = rtomCodeValue === '' || $(this).find('td:nth-child(4)').text() === rtomCodeValue;
+            var soOrderTypeMatch = soOrderTypeValue === '' || $(this).find('td:nth-child(9)').text() === soOrderTypeValue;
+            var serviceTypeMatch = serviceTypeValue === '' || $(this).find('td:nth-child(10)').text() === serviceTypeValue;
+            var soStatusMatch = soStatusValue === '' || $(this).find('td:nth-child(13)').text() === soStatusValue;
+            var salesChannelMatch = salesChannelValue === '' || $(this).find('td:nth-child(16)').text() === salesChannelValue;
+            var salesPersonMatch = salesPersonValue === '' || $(this).find('td:nth-child(17)').text() === salesPersonValue;
+            var bbPackageMatch = bbPackageValue === '' || $(this).find('td:nth-child(18)').text() === bbPackageValue;
+            var imeiNoMatch = imeiNoValue === '' || $(this).find('td:nth-child(19)').text() === imeiNoValue;
 
-// Hide rows that don't match the selected value in the specified column
-if (columnValue !== '') {
-$('#data-table tbody tr').not(':has(td:nth-child(' + columnIndex + '):contains("' + columnValue + '"))').hide();
-}
-}
+
+            return regionMatch && provinceMatch && rtomCodeMatch && soOrderTypeMatch && serviceTypeMatch && soStatusMatch && salesChannelMatch && salesPersonMatch && bbPackageMatch && imeiNoMatch;
+        });
+
+        // Update the total sales textbox value
+        $('#totalSales').val($filteredRows.length);
+    
+
+        if ($filteredRows.length === 0) {
+            $('#no-data-message').show();
+        } else {
+            $('#no-data-message').hide();
+            $filteredRows.show();
+        }
+    });
 });
 </script>
 
-
-<?php include 'includes/script.php';?>
-<?php include 'includes/footer.php';?>
-    
 </body>
 </html>
 
